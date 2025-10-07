@@ -6,6 +6,8 @@
 #include <MFRC522.h>           // Install "MFRC522" by GithubCommunity
 #include <Adafruit_NeoPixel.h> // Install "Adafruit Neopixel" by Adafruit
 
+#include "helper_functions.h"  // Helper functions in current directory
+
 const uint8_t SERVO_PIN = 7; //2;
 const int SERVO_LOCK_ANGLE = 0;
 const int SERVO_UNLOCK_ANGLE = 90;
@@ -62,19 +64,6 @@ void lcd_setup() {
   lcd.clear();
 }
 
-// Print to lcd screen
-void lcd_print(String output) {
-   lcd.clear();
-   lcd.setCursor(0, 0);
-
-   if (output.length() >= 16) {
-    lcd.print(output.substring(0,16));
-    lcd.setCursor(0, 1);
-    lcd.print(output.substring(16, output.length()));
-  } else {
-    lcd.setCursor(0, 0); lcd.print(output);
-  }
-}
 
 // ====================== LED STRIP CONFIG ========================
 /*
@@ -122,6 +111,9 @@ void rfid_setup() {
   mfrc522.PCD_Init(); // Initialize MFRC522
   lcd_print("Scan PICC to see UID");
 }
+
+// ====================== MAIN LOOP ==============================
+
 
 void loop() {
   // Reset the loop if no new card present on the sensor/reader. This saves the entire process when idle.
