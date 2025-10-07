@@ -1,23 +1,9 @@
-/* TODO: implement sleep on nano every
- * wake using IRQ pin on RFID
- * general power management: turn off devices when not in use (screen, LEDs...)
- * 
- * Also eeprom
- * 
- * RFID needs fix: new tag, so new library. The current library only reads MIFARE 
- * classic tags. we have NTAG213 (see "NCF ReWriter" in GitHub to write/read from
- * the tags. Simply put: thes tags have different data fields mapped to different
- * pages of memory. Probably something we'll have to save for a future iteration
- * the design.
- */
- 
-
 #include <Arduino.h>
 #include <Servo.h>
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h> // Install "LiquidCrystal I2C" by Frank de Brabander
 #include <SPI.h>
-#include <MFRC522.h> // Install "MFRC522" by GithubCommunity
+#include <MFRC522.h>           // Install "MFRC522" by GithubCommunity
 #include <Adafruit_NeoPixel.h> // Install "Adafruit Neopixel" by Adafruit
 
 const uint8_t SERVO_PIN = 7; //2;
