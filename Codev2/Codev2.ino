@@ -1,3 +1,17 @@
+/* TODO: implement sleep on nano every
+ * wake using IRQ pin on RFID
+ * general power management: turn off devices when not in use (screen, LEDs...)
+ * 
+ * Also eeprom
+ * 
+ * RFID needs fix: new tag, so new library. The current library only reads MIFARE 
+ * classic tags. we have NTAG213 (see "NCF ReWriter" in GitHub to write/read from
+ * the tags. Simply put: thes tags have different data fields mapped to different
+ * pages of memory. Probably something we'll have to save for a future iteration
+ * the design.
+ */
+ 
+
 #include <Arduino.h>
 #include <Servo.h>
 #include <Wire.h>
@@ -6,7 +20,7 @@
 #include <MFRC522.h> // Install "MFRC522" by GithubCommunity
 #include <Adafruit_NeoPixel.h> // Install "Adafruit Neopixel" by Adafruit
 
-const uint8_t SERVO_PIN = 2;
+const uint8_t SERVO_PIN = 7; //2;
 const int SERVO_LOCK_ANGLE = 0;
 const int SERVO_UNLOCK_ANGLE = 90;
 const unsigned long HOLD_MS = 2000;  // time to hold each position
@@ -14,17 +28,17 @@ const uint8_t RST_PIN = 9;
 const uint8_t SS_PIN = 10;
 const uint8_t BUZZER_PIN = 6;
 const uint8_t ERROR_PIN = 4; // Red LED PIN
-const uint8_t VALID_PIN = 5; // Green LED PIN
-const uint8_t LOW_BATTERY_PIN = 3; // Yellow LED PIN
-const uint8_t LED_TOGGLE_PIN = 7; // Toggles power for led strip
-const uint8_t LED_DATA_PIN = 8;
-const uint8_t LED_COUNT = 23;
+const uint8_t VALID_PIN = 3; //5; // Green LED PIN
+const uint8_t LOW_BATTERY_PIN = 5; //3; // Yellow LED PIN
+//const uint8_t LED_TOGGLE_PIN = 7; // Toggles power for led strip
+//const uint8_t LED_DATA_PIN = 8;
+//const uint8_t LED_COUNT = 23;
 
 
 MFRC522 mfrc522(SS_PIN, RST_PIN); // Instantiate RFID Object w/ slave select and reset pins
 LiquidCrystal_I2C lcd(0x27, 16, 2); // Instantiate LCD Screen Object
 Servo lockServo; // Instantiate Servo Object
-Adafruit_NeoPixel strip(LED_COUNT, LED_DATA_PIN, NEO_GRB + NEO_KHZ800); //Instantiate LED Strip Object
+//Adafruit_NeoPixel strip(LED_COUNT, LED_DATA_PIN, NEO_GRB + NEO_KHZ800); //Instantiate LED Strip Object
 
 // Buzzer for error
 void error() {
@@ -34,7 +48,7 @@ void error() {
       delay(500);
     }
   
-  noTone(buzzer);
+  noTone(BUZZER_PIN);
 }
 
 // ====================== SERVO CONFIG =============================
@@ -77,10 +91,10 @@ void lcd_print(String output) {
 }
 
 // ====================== LED STRIP CONFIG ========================
-
+/*
 void led_setup() {
   strip.begin(); // Initialize the strip
-  strip.show();	// Turn off all LEDs at start
+  strip.show();  // Turn off all LEDs at start
   strip.setBrightness(100); // 0-255 brightness scale
 }
 
@@ -110,7 +124,7 @@ uint32_t Wheel(byte WheelPos) {
   WheelPos -= 170;
   return strip.Color(WheelPos * 3, 255 - WheelPos * 3, 0);
 }
-
+*/
 
 // ====================== RFID CONFIG ==============================
 
@@ -118,24 +132,24 @@ uint32_t Wheel(byte WheelPos) {
 byte nuidPICC[4];
 
 void rfid_setup() {
-	SPI.begin(); // Initialize SPI bus
-	mfrc522.PCD_Init(); // Initialize MFRC522
-	lcd_print("Scan PICC to see UID");
+  SPI.begin(); // Initialize SPI bus
+  mfrc522.PCD_Init(); // Initialize MFRC522
+  lcd_print("Scan PICC to see UID");
 }
 
 void loop() {
-	// Reset the loop if no new card present on the sensor/reader. This saves the entire process when idle.
-	if (!mfrc522.PICC_IsNewCardPresent()) {
-		return;
-	}
+  // Reset the loop if no new card present on the sensor/reader. This saves the entire process when idle.
+  if (!mfrc522.PICC_IsNewCardPresent()) {
+    return;
+  }
 
-	// Select one of the cards
-	if (!mfrc522.PICC_ReadCardSerial()) {
-		return;
-	}
+  // Select one of the cards
+  if (!mfrc522.PICC_ReadCardSerial()) {
+    return;
+  }
 
-	
-	if (mfrc522.uid.uidByte[0] != nuidPICC[0] ||
+  
+  if (mfrc522.uid.uidByte[0] != nuidPICC[0] ||
     mfrc522.uid.uidByte[1] != nuidPICC[1] ||
     mfrc522.uid.uidByte[2] != nuidPICC[2] ||
     mfrc522.uid.uidByte[3] != nuidPICC[3] ) {
@@ -145,15 +159,16 @@ void loop() {
     for (byte i = 0; i < 4; i++) {
       nuidPICC[i] = mfrc522.uid.uidByte[i];
       uidString += String(mfrc522.uid.uidByte[i]);
-	}
+  }
     lcd_print(uidString);
-		
-  	} else {
-    	servo_unlock();
-    	rainbowCycle(10);
-    	strip.clear();
-    	strip.show();
-  	}
+    
+    } else {
+      servo_unlock();
+      /*rainbowCycle(10);
+      strip.clear();
+      strip.show();
+      */
+    }
 
   // Halt PICC
   mfrc522.PICC_HaltA();
@@ -166,8 +181,8 @@ void loop() {
 // ====================== ARDUINO ENTRY POINTS ==========================
 
 void setup() {
-  pinMode(LED_TOGGLE_PIN, OUTPUT);
-  led_setup();
+  //pinMode(LED_TOGGLE_PIN, OUTPUT);
+  //led_setup();
   lcd_setup();
   servo_setup();
   rfid_setup();
