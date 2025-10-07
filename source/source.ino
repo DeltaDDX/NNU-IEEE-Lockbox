@@ -6,6 +6,7 @@
 #include <MFRC522.h>           // Install "MFRC522" by GithubCommunity
 #include <Adafruit_NeoPixel.h> // Install "Adafruit Neopixel" by Adafruit
 
+#define SERIAL_DEBUG
 
 const uint8_t SERVO_PIN = 7; //2;
 const int SERVO_LOCK_ANGLE = 0;
@@ -31,12 +32,12 @@ Servo lockServo; // Instantiate Servo Object
 
 // Buzzer for error
 void error() {
-  
-    for (int i = 0; i < 4; i++) {
-      tone(BUZZER_PIN, 50 * i, 500);
-      delay(500);
-    }
-  
+
+  for (int i = 0; i < 4; i++) {
+    tone(BUZZER_PIN, 50 * i, 500);
+    delay(500);
+  }
+
   noTone(BUZZER_PIN);
 }
 
@@ -48,15 +49,6 @@ void servo_setup() {
   lcd_print("Test ready. Cycling LOCK/UNLOCK...");
 }
 
-// Unlock box
-void servo_unlock() {
-  lockServo.write(SERVO_UNLOCK_ANGLE);
-  lcd_print("Unlocked");
-  delay(HOLD_MS);
-  lockServo.write(SERVO_LOCK_ANGLE);
-  lcd_print("Locked");
-}
-
 // ====================== LCD CONFIG ===============================
 
 void lcd_setup() {
@@ -65,17 +57,16 @@ void lcd_setup() {
   lcd.clear();
 }
 
-
 // ====================== LED STRIP CONFIG ========================
 /*
-void led_setup() {
+  void led_setup() {
   strip.begin(); // Initialize the strip
   strip.show();  // Turn off all LEDs at start
   strip.setBrightness(100); // 0-255 brightness scale
-}
+  }
 
-// Rainbow Cycle
-void rainbowCycle(uint8_t wait) {
+  // Rainbow Cycle
+  void rainbowCycle(uint8_t wait) {
   uint16_t i, j;
 
   for (j = 0; j < 256 * 5; j++) { // 5 cycles of all colors
@@ -85,10 +76,10 @@ void rainbowCycle(uint8_t wait) {
     strip.show();
     delay(wait);
   }
-}
+  }
 
-// Helper function to map values to colors
-uint32_t Wheel(byte WheelPos) {
+  // Helper function to map values to colors
+  uint32_t Wheel(byte WheelPos) {
   WheelPos = 255 - WheelPos;
   if (WheelPos < 85) {
     return strip.Color(255 - WheelPos * 3, 0, WheelPos * 3);
@@ -99,7 +90,7 @@ uint32_t Wheel(byte WheelPos) {
   }
   WheelPos -= 170;
   return strip.Color(WheelPos * 3, 255 - WheelPos * 3, 0);
-}
+  }
 */
 
 // ====================== RFID CONFIG ==============================
@@ -115,7 +106,6 @@ void rfid_setup() {
 
 // ====================== MAIN LOOP ==============================
 
-
 void loop() {
   // Reset the loop if no new card present on the sensor/reader. This saves the entire process when idle.
   if (!mfrc522.PICC_IsNewCardPresent()) {
@@ -127,39 +117,48 @@ void loop() {
     return;
   }
 
-  
+
   if (mfrc522.uid.uidByte[0] != nuidPICC[0] ||
-    mfrc522.uid.uidByte[1] != nuidPICC[1] ||
-    mfrc522.uid.uidByte[2] != nuidPICC[2] ||
-    mfrc522.uid.uidByte[3] != nuidPICC[3] ) {
+      mfrc522.uid.uidByte[1] != nuidPICC[1] ||
+      mfrc522.uid.uidByte[2] != nuidPICC[2] ||
+      mfrc522.uid.uidByte[3] != nuidPICC[3] ) {
 
     // Store NUID into nuidPICC array and string
     String uidString = "";
     for (byte i = 0; i < 4; i++) {
       nuidPICC[i] = mfrc522.uid.uidByte[i];
       uidString += String(mfrc522.uid.uidByte[i]);
-  }
+    }
     lcd_print(uidString);
-    
-    } else {
-      servo_unlock();
-      /*rainbowCycle(10);
+
+#ifdef SERIAL_DEBUG
+    Serial.print(uidString);
+#endif
+
+  } else {
+    servo_unlock();
+    /*rainbowCycle(10);
       strip.clear();
       strip.show();
-      */
-    }
+    */
+  }
 
   // Halt PICC
   mfrc522.PICC_HaltA();
 
   // Stop encryption on PCD
   mfrc522.PCD_StopCrypto1();
-  
+
 }
 
 // ====================== ARDUINO ENTRY POINTS ==========================
 
 void setup() {
+  
+#ifdef SERIAL_DEBUG
+  Serial.begin(9600);
+#endif
+
   //pinMode(LED_TOGGLE_PIN, OUTPUT);
   //led_setup();
   lcd_setup();

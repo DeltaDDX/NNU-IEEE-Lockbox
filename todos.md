@@ -1,7 +1,11 @@
 # TODOs
 
 ## Power saving
+### Sleep functions
 implement sleep on nano every wake using IRQ pin on RFID general power management: turn off devices when not in use (screen, LEDs...)
+
+### processing power
+When the processor is not in sleep state: change the code from continuous polling in the `void loop ()` to something interrupt-driven.
 
 ## Persistent memory for the card UID
 eeprom
