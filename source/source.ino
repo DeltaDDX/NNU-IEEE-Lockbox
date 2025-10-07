@@ -6,7 +6,7 @@
 #include <MFRC522.h>           // Install "MFRC522" by GithubCommunity
 #include <Adafruit_NeoPixel.h> // Install "Adafruit Neopixel" by Adafruit
 
-#define SERIAL_DEBUG
+//#define SERIAL_DEBUG
 
 const uint8_t SERVO_PIN = 7; //2;
 const int SERVO_LOCK_ANGLE = 0;
