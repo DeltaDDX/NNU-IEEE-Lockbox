@@ -7,4 +7,4 @@ Testing NTAG tag is labeled T. Has id 4124181234 when printed to the screen, but
 
 The tag's info:
 
-![image](res/Screenshot_20251006-214121_NFC ReWriter)
+![image](res/Screenshot_20251006-214121_NFC ReWriter.png)
