@@ -6,7 +6,6 @@
 #include <MFRC522.h>           // Install "MFRC522" by GithubCommunity
 #include <Adafruit_NeoPixel.h> // Install "Adafruit Neopixel" by Adafruit
 
-#include "helper_functions.h"  // Helper functions in current directory
 
 const uint8_t SERVO_PIN = 7; //2;
 const int SERVO_LOCK_ANGLE = 0;
@@ -27,6 +26,8 @@ MFRC522 mfrc522(SS_PIN, RST_PIN); // Instantiate RFID Object w/ slave select and
 LiquidCrystal_I2C lcd(0x27, 16, 2); // Instantiate LCD Screen Object
 Servo lockServo; // Instantiate Servo Object
 //Adafruit_NeoPixel strip(LED_COUNT, LED_DATA_PIN, NEO_GRB + NEO_KHZ800); //Instantiate LED Strip Object
+
+#include "helper_functions.h"  // Helper functions in current directory
 
 // Buzzer for error
 void error() {
