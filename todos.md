@@ -13,3 +13,4 @@ eeprom
 ## RFID compatability
 RFID needs fix: new tag, so new library. The current library only reads MIFARE classic tags. we have NTAG213 (see "NCF ReWriter" in GitHub to write/read from the tags. Simply put: thes tags have different data fields mapped to different pages of memory. Probably something we'll have to save for a future iteration the design.
 
+UPDATE: We CAN actually read these tags, it's just not outputting the correct number. See info.md .
