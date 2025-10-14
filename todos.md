@@ -15,7 +15,9 @@ The host controller needs to awake on its own; it cannot rely on the IRQ pin whe
 The sleep command to the RFID reader is done through the library (I think?). But the library we use (miguelbalboa/GitHub Community) says it isn't supported 🤔. https://github.com/miguelbalboa/rfid?tab=readme-ov-file#what-works-and-not
 
 Potential Solutions (technical):
+
 https://github.com/miguelbalboa/rfid/issues/269#issuecomment-287571721
+
 https://forum.arduino.cc/t/rc522-rfid-real-sleep-mode/653664
 
 
