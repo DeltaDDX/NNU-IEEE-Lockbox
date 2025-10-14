@@ -1,3 +1,5 @@
+void wakeUp();
+
 void goToSleep() {
 #ifdef SERIAL_DEBUG
   Serial.println("Going to sleep...");
@@ -5,11 +7,11 @@ void goToSleep() {
 
   sleep_enable();
   noInterrupts();
-  attachInterrupt(digitalPinToInterrupt(IRQ_PIN), wakeUp, RISING);
+  attachInterrupt(digitalPinToInterrupt(IRQ_PIN), wakeUp, FALLING);
   set_sleep_mode(SLEEP_MODE_PWR_DOWN);
-  delay(2000);
+  delay(2000); // Do we need this?
   interrupts();
-  sleep_cpu();
+  sleep_cpu(); // stays on this line until interrupted ^
   
 #ifdef SERIAL_DEBUG
   Serial.println("just woke up!");
@@ -26,5 +28,4 @@ void wakeUp() {
 #endif
 
   sleep_disable();
-  wakeUpMillis = millis();
 }
