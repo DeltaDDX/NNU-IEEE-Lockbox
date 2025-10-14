@@ -114,12 +114,11 @@ void rfid_setup() {
 // ====================== MAIN LOOP ==============================
 
 void loop() {
-  if ((millis() - lastTimerRefresh > SLEEP_TRIGGER_TIME) && digitalRead(IRQ_PIN)) {
+  if ((millis() - lastTimerRefresh > SLEEP_TRIGGER_TIME) && digitalRead(IRQ_PIN)) { // try getting rid of this condition entirely, leaving just goToSleep()
     goToSleep(); // can only wake by pulling the IRQ low
   }
   
-  // Reset the loop if no new card present on the sensor/reader. This saves the entire process when idle.
-  if (!mfrc522.PICC_IsNewCardPresent()) {
+  if (!mfrc522.PICC_IsNewCardPresent()) { // try deleting this too
     return;
   }
 

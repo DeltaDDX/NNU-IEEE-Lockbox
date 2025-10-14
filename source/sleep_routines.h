@@ -11,7 +11,7 @@ void goToSleep() {
   set_sleep_mode(SLEEP_MODE_PWR_DOWN);
   delay(2000); // Do we need this?
   interrupts();
-  sleep_cpu(); // stays on this line until interrupted ^
+  sleep_cpu(); // stays on this line until interrupted ^, then continues on the next line
   
 #ifdef SERIAL_DEBUG
   Serial.println("just woke up!");
