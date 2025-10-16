@@ -10,7 +10,7 @@
 
 //#define SERIAL_DEBUG
 
-#define IRQ_PIN 3 // Change this
+#define IRQ_PIN 8
 #define SLEEP_TRIGGER_TIME 2000 // ms
 
 const uint8_t SERVO_PIN = 7; //2;

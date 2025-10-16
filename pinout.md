@@ -9,3 +9,4 @@ SPI SS      SDA(SS)      D10
 SPI MOSI    MOSI         D11
 SPI MISO    MISO         D12
 SPI SCK     SCK          D13
+IRQ         IRQ          D8
