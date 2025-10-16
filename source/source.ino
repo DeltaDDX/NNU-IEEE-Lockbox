@@ -121,6 +121,7 @@ void eeprom_setup() {
   bool lowTest = !digitalRead(SET_EEPROM_DRIVEN_PIN);
 
   if (highTest && lowTest) {
+    awaitNewCard();
     for (byte i = 0; i < 4; i++) {
       nuidPICC[i] = mfrc522.uid.uidByte[i];
     }
@@ -128,12 +129,11 @@ void eeprom_setup() {
       EEPROM.update(i, nuidPICC[i]);
     }
 #ifdef SERIAL_DEBUG
-    Serial.print("new eeprom writtern");
+    Serial.print("new eeprom written");
 #endif
   }
 
-  else if (~highTest && ~lowTest) { // failed both tests
-    // read the data from EEPROM
+  else if (~highTest && ~lowTest) { // failed both tests, read the data from EEPROM
     for (byte i = 0; i < 4; i++) {
       nuidPICC[i] = EEPROM.read(i);
     }
@@ -143,7 +143,7 @@ void eeprom_setup() {
 #ifdef SERIAL_DEBUG
     Serial.print("Exactly one EEPROM write status test failed");
 #endif
-    while(1); // Can't continue because
+    while(1); // Can't continue because we don't know if EEPROM is to be written
   }
 
 }
@@ -152,35 +152,29 @@ void eeprom_setup() {
 // ====================== MAIN LOOP ==============================
 
 void loop() {
+  // If we've reached this point, we know that nuidPICC is set. It may be set to something arbitrary
+  // if the pins are unconnected and EEPROM is not initialized, which is fine.
+  
   // Reset the loop if no new card present on the sensor/reader. This saves the entire process when idle.
-  if (!mfrc522.PICC_IsNewCardPresent()) {
-    return;
+  awaitNewCard();
+
+  // Print out the card's uid to lcd
+  String uidString = "";
+  for (byte i = 0; i < 4; i++) {
+    uidString += String(nuidPICC[i]);
   }
-
-  // Select one of the cards
-  if (!mfrc522.PICC_ReadCardSerial()) {
-    return;
-  }
-
-
-  if (mfrc522.uid.uidByte[0] != nuidPICC[0] ||
-      mfrc522.uid.uidByte[1] != nuidPICC[1] ||
-      mfrc522.uid.uidByte[2] != nuidPICC[2] ||
-      mfrc522.uid.uidByte[3] != nuidPICC[3] ) {
-
-    // Store NUID into nuidPICC array and string
-    String uidString = "";
-    for (byte i = 0; i < 4; i++) {
-      nuidPICC[i] = mfrc522.uid.uidByte[i];
-      uidString += String(mfrc522.uid.uidByte[i]);
-    }
-    lcd_print(uidString);
+  lcd_print(uidString);
 
 #ifdef SERIAL_DEBUG
-    Serial.print(uidString);
+  Serial.print(uidString);
 #endif
-
-  } else {
+  // if the card matches the one stored in memory...
+  if (mfrc522.uid.uidByte[0] == nuidPICC[0] &&
+      mfrc522.uid.uidByte[1] == nuidPICC[1] &&
+      mfrc522.uid.uidByte[2] == nuidPICC[2] &&
+      mfrc522.uid.uidByte[3] == nuidPICC[3] )
+  {
+    // ... then unlock the servo!
     servo_unlock();
     /*rainbowCycle(10);
       strip.clear();
