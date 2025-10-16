@@ -38,7 +38,7 @@ unsigned long lastTimerRefresh = 0;
 #include "helper_functions.h"  // Helper functions in current directory
 
 //handy sleep function
-
+/*
 void sleep() {
   
   while (true) {
@@ -52,6 +52,7 @@ void sleep() {
   }
   
 }
+*/
 
 // Buzzer for error
 void error() {
