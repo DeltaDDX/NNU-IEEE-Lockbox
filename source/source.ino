@@ -37,6 +37,22 @@ unsigned long lastTimerRefresh = 0;
 #include "sleep_routines.h"
 #include "helper_functions.h"  // Helper functions in current directory
 
+//handy sleep function
+
+void sleep() {
+  
+  while (true) {
+     lcd.off();
+     mfrc522.PCD_SoftPowerDown(); //software power down
+     delay(1000);
+     if (mfrc522.PICC_IsNewCardPresent()) { //checks if a card is present
+      mfrc522.PCD_SoftPowerUp(); //software power up
+        return;
+     }
+  }
+  
+}
+
 // Buzzer for error
 void error() {
 
