@@ -8,14 +8,14 @@
 #include <avr/sleep.h>
 #include <avr/interrupt.h>
 
-//#define SERIAL_DEBUG
+#define SERIAL_DEBUG
 
 #define IRQ_PIN 8
 #define SLEEP_TRIGGER_TIME 2000 // ms
 
 const uint8_t SERVO_PIN = 7; //2;
 const int SERVO_LOCK_ANGLE = 15;
-const int SERVO_UNLOCK_ANGLE = 85;
+const int SERVO_UNLOCK_ANGLE = 75;
 const unsigned long HOLD_MS = 2000;  // time to hold each position
 const uint8_t RST_PIN = 9;
 const uint8_t SS_PIN = 10;
@@ -39,8 +39,8 @@ unsigned long lastTimerRefresh = 0;
 
 //handy sleep function
 /*
-void sleep() {
-  
+  void sleep() {
+
   while (true) {
      lcd.off();
      mfrc522.PCD_SoftPowerDown(); //software power down
@@ -50,8 +50,8 @@ void sleep() {
         return;
      }
   }
-  
-}
+
+  }
 */
 
 // Buzzer for error
@@ -131,10 +131,20 @@ void rfid_setup() {
 // ====================== MAIN LOOP ==============================
 
 void loop() {
-  if ((millis() - lastTimerRefresh > SLEEP_TRIGGER_TIME) && digitalRead(IRQ_PIN)) { // try getting rid of this condition entirely, leaving just goToSleep()
+  bool timeTest = (millis() - lastTimerRefresh > SLEEP_TRIGGER_TIME);
+  bool IRQTest = digitalRead(IRQ_PIN);
+
+  if (timeTest && !IRQTest) { // try getting rid of this condition entirely, leaving just goToSleep()
     goToSleep(); // can only wake by pulling the IRQ low
   }
-  
+  else if (!IRQTest) {
+#ifdef SERIAL_DEBUG
+    //Serial.print("IRQ pin low");  // generates excessive output
+#endif
+  }
+
+
+
   if (!mfrc522.PICC_IsNewCardPresent()) { // try deleting this too
     return;
   }
@@ -183,7 +193,7 @@ void loop() {
 // ====================== ARDUINO ENTRY POINTS ==========================
 
 void setup() {
-  
+
 #ifdef SERIAL_DEBUG
   Serial.begin(9600);
 #endif
