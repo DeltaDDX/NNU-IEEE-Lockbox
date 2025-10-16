@@ -1,58 +1,43 @@
 #include <Arduino.h>
 #include <Servo.h>
 #include <Wire.h>
-#include <LiquidCrystal_I2C.h> // Install "LiquidCrystal I2C" by Frank de Brabander
+#include <LiquidCrystal_I2C.h>  // Install "LiquidCrystal I2C" by Frank de Brabander
 #include <SPI.h>
-#include <MFRC522.h>           // Install "MFRC522" by GithubCommunity
-#include <Adafruit_NeoPixel.h> // Install "Adafruit Neopixel" by Adafruit
+#include <MFRC522.h>            // Install "MFRC522" by GithubCommunity
+#include <Adafruit_NeoPixel.h>  // Install "Adafruit Neopixel" by Adafruit
 #include <avr/sleep.h>
 #include <avr/interrupt.h>
 
-#define SERIAL_DEBUG
+//#define SERIAL_DEBUG
 
-#define IRQ_PIN 8
-#define SLEEP_TRIGGER_TIME 2000 // ms
+#define IRQ_PIN 3                // Change this
+#define SLEEP_TRIGGER_TIME 2000  // ms
 
-const uint8_t SERVO_PIN = 7; //2;
-const int SERVO_LOCK_ANGLE = 15;
-const int SERVO_UNLOCK_ANGLE = 75;
+const uint8_t SERVO_PIN = 7;  //2;
+const int SERVO_LOCK_ANGLE = 0;
+const int SERVO_UNLOCK_ANGLE = 90;
 const unsigned long HOLD_MS = 2000;  // time to hold each position
 const uint8_t RST_PIN = 9;
 const uint8_t SS_PIN = 10;
 const uint8_t BUZZER_PIN = 6;
-const uint8_t ERROR_PIN = 4; // Red LED PIN
-const uint8_t VALID_PIN = 3; //5; // Green LED PIN
-const uint8_t LOW_BATTERY_PIN = 5; //3; // Yellow LED PIN
+const uint8_t ERROR_PIN = 4;        // Red LED PIN
+const uint8_t VALID_PIN = 3;        //5; // Green LED PIN
+const uint8_t LOW_BATTERY_PIN = 5;  //3; // Yellow LED PIN
 //const uint8_t LED_TOGGLE_PIN = 7; // Toggles power for led strip
 //const uint8_t LED_DATA_PIN = 8;
 //const uint8_t LED_COUNT = 23;
 
 
-MFRC522 mfrc522(SS_PIN, RST_PIN); // Instantiate RFID Object w/ slave select and reset pins
-LiquidCrystal_I2C lcd(0x27, 16, 2); // Instantiate LCD Screen Object
-Servo lockServo; // Instantiate Servo Object
+MFRC522 mfrc522(SS_PIN, RST_PIN);    // Instantiate RFID Object w/ slave select and reset pins
+LiquidCrystal_I2C lcd(0x27, 16, 2);  // Instantiate LCD Screen Object
+Servo lockServo;                     // Instantiate Servo Object
 //Adafruit_NeoPixel strip(LED_COUNT, LED_DATA_PIN, NEO_GRB + NEO_KHZ800); //Instantiate LED Strip Object
 unsigned long lastTimerRefresh = 0;
 
 #include "sleep_routines.h"
 #include "helper_functions.h"  // Helper functions in current directory
 
-//handy sleep function
-/*
-  void sleep() {
 
-  while (true) {
-     lcd.off();
-     mfrc522.PCD_SoftPowerDown(); //software power down
-     delay(1000);
-     if (mfrc522.PICC_IsNewCardPresent()) { //checks if a card is present
-      mfrc522.PCD_SoftPowerUp(); //software power up
-        return;
-     }
-  }
-
-  }
-*/
 
 // Buzzer for error
 void error() {
@@ -123,31 +108,40 @@ void lcd_setup() {
 byte nuidPICC[4];
 
 void rfid_setup() {
-  SPI.begin(); // Initialize SPI bus
-  mfrc522.PCD_Init(); // Initialize MFRC522
+  SPI.begin();         // Initialize SPI bus
+  mfrc522.PCD_Init();  // Initialize MFRC522
   lcd_print("Scan PICC to see UID");
 }
 
 // ====================== MAIN LOOP ==============================
-
 void loop() {
-  bool timeTest = (millis() - lastTimerRefresh > SLEEP_TRIGGER_TIME);
-  bool IRQTest = digitalRead(IRQ_PIN);
+  mfrc522.PCD_Init(); //should undo the digitalwrite high on reset pin. IE: it turns the rfid reader back on
 
-  if (timeTest && !IRQTest) { // try getting rid of this condition entirely, leaving just goToSleep()
-    goToSleep(); // can only wake by pulling the IRQ low
-  }
-  else if (!IRQTest) {
-#ifdef SERIAL_DEBUG
-    //Serial.print("IRQ pin low");  // generates excessive output
-#endif
+  if (mfrc522.PICC_IsNewCardPresent()) {
+    // lcd_print("New Card is present");
+    lcd.backlight(); //need to turn on the backlight for this sucker to work
+    card_process(); //does the card stuff
+    delay(1000); //waits a second before shutting off the backlight
+    //lcd_print("card() was just called");
   }
 
+  digitalWrite(RST_PIN, HIGH); //should turn off rfid card
+  
+  lcd.noBacklight(); //turns backlight on lcd
 
+  delay(4000); //Delay this long might be slightly excessive. LCD backlight is off for this long, and rfid reader is theoretically off as well.
+}
 
-  if (!mfrc522.PICC_IsNewCardPresent()) { // try deleting this too
-    return;
-  }
+//Old loop function. Only called if card is present now
+void card_process() {
+ // if ((millis() - lastTimerRefresh > SLEEP_TRIGGER_TIME) && digitalRead(IRQ_PIN)) {  // try getting rid of this condition entirely, leaving just goToSleep()
+   // goToSleep();                                                                     // can only wake by pulling the IRQ low
+  //}
+
+  //This stuff isn't needed now that we're already checking in the loop function
+  //if (!mfrc522.PICC_IsNewCardPresent()) {  // try deleting this too
+    //return;
+  //}
 
   // Select one of the cards
   if (!mfrc522.PICC_ReadCardSerial()) {
@@ -155,10 +149,7 @@ void loop() {
   }
 
 
-  if (mfrc522.uid.uidByte[0] != nuidPICC[0] ||
-      mfrc522.uid.uidByte[1] != nuidPICC[1] ||
-      mfrc522.uid.uidByte[2] != nuidPICC[2] ||
-      mfrc522.uid.uidByte[3] != nuidPICC[3] ) {
+  if (mfrc522.uid.uidByte[0] != nuidPICC[0] || mfrc522.uid.uidByte[1] != nuidPICC[1] || mfrc522.uid.uidByte[2] != nuidPICC[2] || mfrc522.uid.uidByte[3] != nuidPICC[3]) {
 
     // Store NUID into nuidPICC array and string
     String uidString = "";
@@ -187,7 +178,6 @@ void loop() {
   mfrc522.PCD_StopCrypto1();
 
   lastTimerRefresh = millis();
-
 }
 
 // ====================== ARDUINO ENTRY POINTS ==========================
