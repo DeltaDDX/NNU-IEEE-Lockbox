@@ -9,8 +9,8 @@
 //#define SERIAL_DEBUG
 
 const uint8_t SERVO_PIN = 7; //2;
-const int SERVO_LOCK_ANGLE = 0;
-const int SERVO_UNLOCK_ANGLE = 90;
+const int SERVO_LOCK_ANGLE = 15;
+const int SERVO_UNLOCK_ANGLE = 85;
 const unsigned long HOLD_MS = 2000;  // time to hold each position
 const uint8_t RST_PIN = 9;
 const uint8_t SS_PIN = 10;
