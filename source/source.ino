@@ -5,6 +5,10 @@
 #include <SPI.h>
 #include <MFRC522.h>           // Install "MFRC522" by GithubCommunity
 #include <Adafruit_NeoPixel.h> // Install "Adafruit Neopixel" by Adafruit
+#include <EEPROM.h>
+
+#define SET_EEPROM_DRIVER_PIN 4 // Change this
+#define SET_EEPROM_DRIVEN_PIN 5 // Change this
 
 //#define SERIAL_DEBUG
 
@@ -104,6 +108,47 @@ void rfid_setup() {
   lcd_print("Scan PICC to see UID");
 }
 
+// ====================== EEPROM CONFIG ==========================
+
+void eeprom_setup() {
+  pinMode(SET_EEPROM_DRIVER_PIN, OUTPUT);
+  pinMode(SET_EEPROM_DRIVEN_PIN, INPUT);
+
+  // Are the pins connected?
+  digitalWrite(SET_EEPROM_DRIVER_PIN, HIGH);
+  bool highTest = digitalRead(SET_EEPROM_DRIVEN_PIN);
+  digitalWrite(SET_EEPROM_DRIVER_PIN, LOW);
+  bool lowTest = !digitalRead(SET_EEPROM_DRIVEN_PIN);
+
+  if (highTest && lowTest) {
+    for (byte i = 0; i < 4; i++) {
+      nuidPICC[i] = mfrc522.uid.uidByte[i];
+    }
+    for (byte i = 0; i < 4; ++i) {
+      EEPROM.update(i, nuidPICC[i]);
+    }
+#ifdef SERIAL_DEBUG
+    Serial.print("new eeprom writtern");
+#endif
+  }
+
+  else if (~highTest && ~lowTest) { // failed both tests
+    // read the data from EEPROM
+    for (byte i = 0; i < 4; i++) {
+      nuidPICC[i] = EEPROM.read(i);
+    }
+  }
+
+  else {
+#ifdef SERIAL_DEBUG
+    Serial.print("Exactly one EEPROM write status test failed");
+#endif
+    while(1); // Can't continue because
+  }
+
+}
+
+
 // ====================== MAIN LOOP ==============================
 
 void loop() {
@@ -154,7 +199,7 @@ void loop() {
 // ====================== ARDUINO ENTRY POINTS ==========================
 
 void setup() {
-  
+
 #ifdef SERIAL_DEBUG
   Serial.begin(9600);
 #endif
@@ -164,4 +209,5 @@ void setup() {
   lcd_setup();
   servo_setup();
   rfid_setup();
+  eeprom_setup();
 }
