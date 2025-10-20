@@ -115,7 +115,8 @@ void rfid_setup() {
 
 // ====================== MAIN LOOP ==============================
 void loop() {
-  mfrc522.PCD_Init(); //should undo the digitalwrite high on reset pin. IE: it turns the rfid reader back on
+ // mfrc522.PCD_Init(); //should undo the digitalwrite high on reset pin. IE: it turns the rfid reader back on
+ mfrc522.PCD_SoftPowerUp(); // powers on the card -- Digital write didn't seem to be working during testing
 
   if (mfrc522.PICC_IsNewCardPresent()) {
     // lcd_print("New Card is present");
@@ -125,7 +126,8 @@ void loop() {
     //lcd_print("card() was just called");
   }
 
-  digitalWrite(RST_PIN, HIGH); //should turn off rfid card
+ // digitalWrite(RST_PIN, HIGH); //should turn off rfid card
+ mfrc522.PCD_SoftPowerDown();
   
   lcd.noBacklight(); //turns backlight on lcd
 
