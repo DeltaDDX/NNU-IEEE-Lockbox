@@ -1,0 +1,8 @@
+site_name: RFID-activated lockbox documentation
+theme:
+  name: readthedocs
+
+nav:
+    - index.md
+    - rfid_docs.md
+    - cad.md
