@@ -30,6 +30,15 @@ LiquidCrystal_I2C lcd(0x27, 16, 2); // Instantiate LCD Screen Object
 Servo lockServo; // Instantiate Servo Object
 //Adafruit_NeoPixel strip(LED_COUNT, LED_DATA_PIN, NEO_GRB + NEO_KHZ800); //Instantiate LED Strip Object
 
+// ====================== ARDUINO SETUP ==========================
+
+void setup() {
+  //led_setup();
+  lcd_setup();
+  servo_setup();
+  rfid_setup();
+}
+
 // ====================== MAIN LOOP ==============================
 
 void loop() {
@@ -44,24 +53,15 @@ void loop() {
   //Wake up LCD and Unlock Box if LCD is sleeping
   if (lcd_sleeping) {
     wakeLCD();
-    lastActivity = millis()
+    lastActivity = millis();
   }
   
   // Print RFID_String and Unlock Box
-  lcd_print(RFID_string);
+  lcd_print(RFID_string());
   servo_unlock();
   
   // Halt PICC and stop encryption on RFID
   mfrc522.PICC_HaltA();
   mfrc522.PCD_StopCrypto1();
-  delay(50)
-}
-
-// ====================== ARDUINO SETUP ==========================
-
-void setup() {
-  //led_setup();
-  lcd_setup();
-  servo_setup();
-  rfid_setup();
+  delay(50);
 }
