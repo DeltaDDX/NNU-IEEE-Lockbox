@@ -42,7 +42,8 @@ void loop() {
     return;
   }
 
-  checkRFID(); // Checks card read -> Unlock box
+  lcd_print(RFID_string);
+  servo_unlock();
 
   // Halt PICC and stop encryption on RFID
   mfrc522.PICC_HaltA();
@@ -52,11 +53,7 @@ void loop() {
 // ====================== ARDUINO ENTRY POINTS ==========================
 
 void setup() {
-  
-#ifdef SERIAL_DEBUG
-  Serial.begin(9600);
-#endif
-
+ 
   //led_setup();
   lcd_setup();
   servo_setup();
