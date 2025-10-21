@@ -18,7 +18,6 @@ const uint8_t BUZZER_PIN = 6;
 const uint8_t ERROR_PIN = 4; // Red LED PIN
 const uint8_t VALID_PIN = 3; //5; // Green LED PIN
 const uint8_t LOW_BATTERY_PIN = 5; //3; // Yellow LED PIN
-//const uint8_t LED_TOGGLE_PIN = 7; // Toggles power for led strip
 //const uint8_t LED_DATA_PIN = 8;
 //const uint8_t LED_COUNT = 23;
 
@@ -46,7 +45,6 @@ void error() {
 void servo_setup() {
   lockServo.attach(SERVO_PIN);
   lockServo.write(SERVO_LOCK_ANGLE);
-  lcd_print("Test ready. Cycling LOCK/UNLOCK...");
 }
 
 // ====================== LCD CONFIG ===============================
@@ -106,18 +104,7 @@ void rfid_setup() {
 
 // ====================== MAIN LOOP ==============================
 
-void loop() {
-  // Reset the loop if no new card present on the sensor/reader. This saves the entire process when idle.
-  if (!mfrc522.PICC_IsNewCardPresent()) {
-    return;
-  }
-
-  // Select one of the cards
-  if (!mfrc522.PICC_ReadCardSerial()) {
-    return;
-  }
-
-
+void checkRFID() {
   if (mfrc522.uid.uidByte[0] != nuidPICC[0] ||
       mfrc522.uid.uidByte[1] != nuidPICC[1] ||
       mfrc522.uid.uidByte[2] != nuidPICC[2] ||
@@ -135,20 +122,34 @@ void loop() {
     Serial.print(uidString);
 #endif
 
-  } else {
+  } 
+
     servo_unlock();
-    /*rainbowCycle(10);
-      strip.clear();
-      strip.show();
+    /*
+    rainbowCycle(10);
+    strip.clear();
+    strip.show();
     */
+}
+
+void loop() {
+  // Reset the loop if no new card present on the sensor/reader. This saves the entire process when idle.
+  if (!mfrc522.PICC_IsNewCardPresent()) {
+    return;
   }
+
+  // Select one of the cards
+  if (!mfrc522.PICC_ReadCardSerial()) {
+    return;
+  }
+
+  checkRFID();
 
   // Halt PICC
   mfrc522.PICC_HaltA();
 
-  // Stop encryption on PCD
+  // Stop encryption on RFID
   mfrc522.PCD_StopCrypto1();
-
 }
 
 // ====================== ARDUINO ENTRY POINTS ==========================
@@ -159,7 +160,6 @@ void setup() {
   Serial.begin(9600);
 #endif
 
-  //pinMode(LED_TOGGLE_PIN, OUTPUT);
   //led_setup();
   lcd_setup();
   servo_setup();
