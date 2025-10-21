@@ -21,16 +21,6 @@ void rfid_setup() {
   lcd_print("Scan PICC to see UID");
 }
 
-void error() {
-
-  for (int i = 0; i < 4; i++) {
-    tone(BUZZER_PIN, 50 * i, 500);
-    delay(500);
-  }
-
-  noTone(BUZZER_PIN);
-}
-
 // ====================== LED STRIP CONFIG ========================
 /*
   void led_setup() {
@@ -69,7 +59,7 @@ void error() {
 
 // ========================= Functions =========================
 
-// Compare RFID -> unlock box
+// Compare RFID -> Unlock Box
 String RFID_string() {
   String uidString;
   
@@ -80,7 +70,7 @@ String RFID_string() {
   return uidString;
 }
 
-// Print to lcd screen
+// Print to LCD Screen
 void lcd_print(String output) {
    lcd.clear();
    lcd.setCursor(0, 0);
@@ -95,7 +85,7 @@ void lcd_print(String output) {
   }
 }
 
-// Unlock box
+// Unlock Box
 void servo_unlock() {
   lockServo.write(SERVO_UNLOCK_ANGLE);
   lcd_print("Unlocked");
@@ -104,10 +94,19 @@ void servo_unlock() {
   lcd_print("Locked");
 }
 
+// Buzzer for Error
 void error() {
   for (int i = 0; i < 4; i++) {
     tone(BUZZER_PIN, 50 * i, 500);
     delay(500);
   }
   noTone(BUZZER_PIN);
+}
+
+// Check if card
+bool is_AvailableCard() {
+  if (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial()) {
+    return true;
+  }
+  return false;
 }
