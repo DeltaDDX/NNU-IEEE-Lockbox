@@ -15,43 +15,68 @@ void servo_setup() {
 
 // ====================== RFID CONFIG ==============================
 
-// Init array that will store new NUID
-byte nuidPICC[4];
-
 void rfid_setup() {
   SPI.begin(); // Initialize SPI bus
   mfrc522.PCD_Init(); // Initialize MFRC522
   lcd_print("Scan PICC to see UID");
 }
 
+void error() {
+
+  for (int i = 0; i < 4; i++) {
+    tone(BUZZER_PIN, 50 * i, 500);
+    delay(500);
+  }
+
+  noTone(BUZZER_PIN);
+}
+
+// ====================== LED STRIP CONFIG ========================
+/*
+  void led_setup() {
+  strip.begin(); // Initialize the strip
+  strip.show();  // Turn off all LEDs at start
+  strip.setBrightness(100); // 0-255 brightness scale
+  }
+
+  // Rainbow Cycle
+  void rainbowCycle(uint8_t wait) {
+  uint16_t i, j;
+
+  for (j = 0; j < 256 * 5; j++) { // 5 cycles of all colors
+    for (i = 0; i < strip.numPixels(); i++) {
+      strip.setPixelColor(i, Wheel(((i * 256 / strip.numPixels()) + j) & 255));
+    }
+    strip.show();
+    delay(wait);
+  }
+  }
+
+  // Helper function to map values to colors
+  uint32_t Wheel(byte WheelPos) {
+  WheelPos = 255 - WheelPos;
+  if (WheelPos < 85) {
+    return strip.Color(255 - WheelPos * 3, 0, WheelPos * 3);
+  }
+  if (WheelPos < 170) {
+    WheelPos -= 85;
+    return strip.Color(0, WheelPos * 3, 255 - WheelPos * 3);
+  }
+  WheelPos -= 170;
+  return strip.Color(WheelPos * 3, 255 - WheelPos * 3, 0);
+  }
+*/
+
 // ========================= Functions =========================
 
 // Compare RFID -> unlock box
-void checkRFID() {
-  if (mfrc522.uid.uidByte[0] != nuidPICC[0] ||
-      mfrc522.uid.uidByte[1] != nuidPICC[1] ||
-      mfrc522.uid.uidByte[2] != nuidPICC[2] ||
-      mfrc522.uid.uidByte[3] != nuidPICC[3] ) {
-
-    // Store NUID into nuidPICC array and string
-    String uidString = "";
-    for (byte i = 0; i < 4; i++) {
-      nuidPICC[i] = mfrc522.uid.uidByte[i];
-      uidString += String(mfrc522.uid.uidByte[i]);
-    }
-    lcd_print(uidString);
-
-#ifdef SERIAL_DEBUG
-    Serial.print(uidString);
-#endif
-
-  } 
-    servo_unlock();
-    /*
-    rainbowCycle(10);
-    strip.clear();
-    strip.show();
-    */
+string RFID_string() {
+  String uidString;
+  
+  for (byte i = 0; i < 4; i++) {
+    uidString += String(mfrc522.uid.uidByte[i]);
+  }
+  return uidString;
 }
 
 // Print to lcd screen
@@ -78,24 +103,10 @@ void servo_unlock() {
   lcd_print("Locked");
 }
 
-
-// future idea
-/*
-struct uid {
-  byte uidBytes[4];
-};
-
-bool compare_uid(uid uid1, uid uid2) {
-  for (byte i = 0; i < len(uid1.uidBytes); ++i) {
-    if (uid1.uidBytes[i] != uid2.uidBytes[i]) {
-      return 0;
-    }
+void error() {
+  for (int i = 0; i < 4; i++) {
+    tone(BUZZER_PIN, 50 * i, 500);
+    delay(500);
   }
-
-  return 1;
+  noTone(BUZZER_PIN);
 }
-
-uid make_uid() {
-  
-}
-*/
