@@ -2,7 +2,15 @@ site_name: RFID-activated lockbox documentation
 theme:
   name: readthedocs
 
+plugins:
+    - glightbox # This plugin enables the image lightbox
+
 nav:
-    - index.md
-    - rfid_docs.md
-    - cad.md
+    - Home: index.md
+    - Electronic:
+      - rfid.md
+      - lcd.md
+      - servo.md
+      - led_strip.md
+    - Mechanical:
+      - cad.md

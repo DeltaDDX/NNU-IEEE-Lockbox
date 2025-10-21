@@ -1,0 +1,1 @@
+The servo has three wires that need connected. The orange wire is the control wire and is connected to D7 on the Arduino Nano. The Red wire is +5V and the brown wire is GND. To test the servo out and see the code that is required to run it, in the Arduino IDE go to File > Examples > Servo > 

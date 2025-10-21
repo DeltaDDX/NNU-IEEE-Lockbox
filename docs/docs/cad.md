@@ -1,6 +1,6 @@
-Title:   CAD
+Title:   Mechanical
 Summary: A documentation of the CAD files and how to use them.
-Authors: JOhnathan Stillman
+Authors: Johnathan Stillman
 Date:    October 20, 2025
 
 # Mechanical:

@@ -1,3 +1,8 @@
+Title:   RFID Reader
+Summary: A documentation of the RFID Reader and how to use it.
+Authors: Andrew Bargen
+Date:    October 20, 2025
+
 # About the RFID
 The rfid reader used is the MFRC522. The [datasheet](https://www.nxp.com/docs/en/data-sheet/MFRC522.pdf) describes the properties of the chip. It also describes how to use the chip. Thankfully, someone has already done the heavy lifting and has implemented a library with a few simple function calls so that we don't have to think about implementation details. The chip uses the SPI (Serial Periphrial Interface) to communcate with the microcontroller.
 

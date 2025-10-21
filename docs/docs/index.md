@@ -1,8 +1,18 @@
-# NNU-IEEE-Lockbox
-This is an electronic lockbox that uses RFID to open.
+# Constructing the RFID-Activated Lockbox
 
-# The Team
-IEEE club at Northwest Nazarene University
 
-# Changes
-See features/* branch(es) for latest additions to the source that will be merged with main once testing is complete
+## Electronics
+For the electronics on this project there are a few different parts. Here is the main wiring diagram for the whole project:
+
+![image](res/top_schematic.png)
+
+### Components
+
+- [MFRC522 Reader Module](rfid.md)
+- [Liquid Crystal Display](lcd.md)
+- [Servo Motor](servo.md)
+- [LED Light Strip](led_strip.md)
+
+## Mechanical
+
+- [3D - Printed box](cad.md)

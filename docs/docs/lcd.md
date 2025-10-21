@@ -1,0 +1,1 @@
+To test the LCD and operate it there are 4 different wires that need connected to the Arduino Nano. Reference the wiring diagram to see what is connected to what. The pins on the LCD are labeled. To run the LCD you will need to install the LiquidCrystal I2C library in the Arduino IDE. To test the LCD select File > Examples > LiquidCrystal I2C > HelloWorld.
