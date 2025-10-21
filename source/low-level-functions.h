@@ -70,11 +70,12 @@ void error() {
 // ========================= Functions =========================
 
 // Compare RFID -> unlock box
-string RFID_string() {
+String RFID_string() {
   String uidString;
   
   for (byte i = 0; i < 4; i++) {
-    uidString += String(mfrc522.uid.uidByte[i]);
+    uidString += String(mfrc522.uid.uidByte[i], HEX);
+    uidString += " ";
   }
   return uidString;
 }
