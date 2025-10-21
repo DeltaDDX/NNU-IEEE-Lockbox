@@ -63,9 +63,10 @@ void rfid_setup() {
 String RFID_string() {
   String uidString;
   
-  for (byte i = 0; i < 4; i++) {
+  for (byte i = 0; i < mfrc522.uid.size; i++) {
     uidString += String(mfrc522.uid.uidByte[i], HEX);
-    uidString += " ";
+    if (i < mfrc522.uid.size - 1) {
+      uidString += ":";
   }
   return uidString;
 }
@@ -109,4 +110,21 @@ bool is_AvailableCard() {
     return true;
   }
   return false;
+}
+
+void sleepLCD() {  // Clear the screen and turn off both display and backlight
+  lcd.clear();  // Clear screen
+  lcd.noDisplay();  // turn off text (reduces consumption)
+  lcd.noBacklight();  // turn off backlight (biggest power saver)
+  lcdSleeping = true;
+}
+
+void wakeLCD() {
+  lcd.display();
+  lcd.backlight();
+  lcd.setCursor(0,0);
+  lcd_print("LCD Awake");
+  lcdSleeping = false;
+  delay(350); // tiny pause so user sees it
+  lcd.clear();
 }
