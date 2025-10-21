@@ -22,10 +22,16 @@ void servo_unlock() {
   lcd_print("Locked");
 }
 
-// Check if card
-bool is_AvailableCard() {
-  if (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial()) {
-    return true;
-  }
-  return false;
-}
+void awaitNewCard() { // poll the reader until new card appears, 
+  while (1) {
+    if (!mfrc522.PICC_IsNewCardPresent()) {
+      continue;
+    }
+
+    // Select one of the cards
+    if (!mfrc522.PICC_ReadCardSerial()) {
+      continue;
+    }
+    else {
+      return;
+    }
