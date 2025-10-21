@@ -12,6 +12,7 @@ const uint8_t SERVO_PIN = 7; //2;
 const int SERVO_LOCK_ANGLE = 15;
 const int SERVO_UNLOCK_ANGLE = 85;
 const unsigned long HOLD_MS = 2000;  // time to hold each position
+const unsigned long LCD_SLEEP_MS = 10000UL;
 const uint8_t RST_PIN = 9;
 const uint8_t SS_PIN = 10;
 const uint8_t BUZZER_PIN = 6;
@@ -21,6 +22,9 @@ const uint8_t LOW_BATTERY_PIN = 5; //3; // Yellow LED PIN
 //const uint8_t LED_DATA_PIN = 8;
 //const uint8_t LED_COUNT = 23;
 
+unsigned long lastActivity = 0;
+bool lcd_sleeping = false;
+
 MFRC522 mfrc522(SS_PIN, RST_PIN); // Instantiate RFID Object w/ slave select and reset pins
 LiquidCrystal_I2C lcd(0x27, 16, 2); // Instantiate LCD Screen Object
 Servo lockServo; // Instantiate Servo Object
@@ -29,17 +33,28 @@ Servo lockServo; // Instantiate Servo Object
 // ====================== MAIN LOOP ==============================
 
 void loop() {
-  
+
+  // Set LCD to sleep if been over set time
+  if (lcd_sleeping && millis() - lastActivity > LCD_SLEEP_MS) {
+    sleepLCD();
+  }
   // Reset loop if no card or cannot read card
   is_AvailableCard();
 
-  // Print RFID code to screen and unlock box
+  //Wake up LCD and Unlock Box if LCD is sleeping
+  if (lcd_sleeping) {
+    wakeLCD();
+    lastActivity = millis()
+  }
+  
+  // Print RFID_String and Unlock Box
   lcd_print(RFID_string);
   servo_unlock();
-
+  
   // Halt PICC and stop encryption on RFID
   mfrc522.PICC_HaltA();
   mfrc522.PCD_StopCrypto1();
+  delay(50)
 }
 
 // ====================== ARDUINO SETUP ==========================
