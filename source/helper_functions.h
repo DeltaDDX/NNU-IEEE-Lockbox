@@ -22,40 +22,10 @@ void servo_unlock() {
   lcd_print("Locked");
 }
 
-void awaitNewCard() { // poll the reader until new card appears, 
-  while (1) {
-    if (!mfrc522.PICC_IsNewCardPresent()) {
-      continue;
-    }
-
-    // Select one of the cards
-    if (!mfrc522.PICC_ReadCardSerial()) {
-      continue;
-    }
-    else {
-      return;
-    }
+// Check if card
+bool is_AvailableCard() {
+  if (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial()) {
+    return true;
   }
+  return false;
 }
-
-
-// future idea
-/*
-  struct uid {
-  byte uidBytes[4];
-  };
-
-  bool compare_uid(uid uid1, uid uid2) {
-  for (byte i = 0; i < len(uid1.uidBytes); ++i) {
-    if (uid1.uidBytes[i] != uid2.uidBytes[i]) {
-      return 0;
-    }
-  }
-
-  return 1;
-  }
-
-  uid make_uid() {
-
-  }
-*/
