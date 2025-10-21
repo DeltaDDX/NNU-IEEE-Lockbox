@@ -48,7 +48,9 @@ void loop() {
     sleepLCD();
   }
   // Reset loop if no card or cannot read card
-  is_AvailableCard();
+  if (!is_AvailableCard()) {
+    return
+    }
 
   //Wake up LCD and Unlock Box if LCD is sleeping
   if (lcd_sleeping) {
