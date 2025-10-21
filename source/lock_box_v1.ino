@@ -32,16 +32,11 @@ Servo lockServo; // Instantiate Servo Object
 // ====================== MAIN LOOP ==============================
 
 void loop() {
-  // Reset loop if no new card present on the sensor
-  if (!mfrc522.PICC_IsNewCardPresent()) {
-    return;
-  }
+  
+  // Reset loop if no card or cannot read card
+  is_AvailableCard();
 
-  // Reset loop if cannot read card
-  if (!mfrc522.PICC_ReadCardSerial()) {
-    return;
-  }
-
+  // Print RFID code to screen and unlock box
   lcd_print(RFID_string);
   servo_unlock();
 
