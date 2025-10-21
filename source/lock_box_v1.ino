@@ -8,8 +8,6 @@
 
 #include "low-level-functions.h"  // Helper functions in current directory
 
-//#define SERIAL_DEBUG
-
 const uint8_t SERVO_PIN = 7; //2;
 const int SERVO_LOCK_ANGLE = 15;
 const int SERVO_UNLOCK_ANGLE = 85;
@@ -28,7 +26,6 @@ LiquidCrystal_I2C lcd(0x27, 16, 2); // Instantiate LCD Screen Object
 Servo lockServo; // Instantiate Servo Object
 //Adafruit_NeoPixel strip(LED_COUNT, LED_DATA_PIN, NEO_GRB + NEO_KHZ800); //Instantiate LED Strip Object
 
-
 // ====================== MAIN LOOP ==============================
 
 void loop() {
@@ -45,10 +42,9 @@ void loop() {
   mfrc522.PCD_StopCrypto1();
 }
 
-// ====================== ARDUINO ENTRY POINTS ==========================
+// ====================== ARDUINO SETUP ==========================
 
 void setup() {
- 
   //led_setup();
   lcd_setup();
   servo_setup();
