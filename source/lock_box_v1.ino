@@ -44,12 +44,12 @@ void setup() {
 void loop() {
 
   // Set LCD to sleep if been over set time
-  if (lcd_sleeping && millis() - lastActivity > LCD_SLEEP_MS) {
+  if (!lcd_sleeping && millis() - lastActivity > LCD_SLEEP_MS) {
     sleepLCD();
   }
   // Reset loop if no card or cannot read card
   if (!is_AvailableCard()) {
-    return
+    return;
     }
 
   //Wake up LCD and Unlock Box if LCD is sleeping
