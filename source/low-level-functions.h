@@ -67,6 +67,7 @@ String RFID_string() {
     uidString += String(mfrc522.uid.uidByte[i], HEX);
     if (i < mfrc522.uid.size - 1) {
       uidString += ":";
+    }
   }
   return uidString;
 }
