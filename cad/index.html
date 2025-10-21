@@ -1,0 +1,172 @@
+<!DOCTYPE html><html class="writer-html5" lang="en"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="shortcut icon" href="../img/favicon.ico">
+    <title>Mechanical - RFID-activated lockbox documentation</title>
+    <link rel="stylesheet" href="../css/theme.css">
+    <link rel="stylesheet" href="../css/theme_extra.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css">
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Mechanical";
+        var mkdocs_page_input_path = "cad.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+<link href="../assets/stylesheets/glightbox.min.css" rel="stylesheet"><script src="../assets/javascripts/glightbox.min.js"></script><style id="glightbox-style">
+            html.glightbox-open { overflow: initial; height: 100%; }
+            .gslide-title { margin-top: 0px; user-select: text; }
+            .gslide-desc { color: #666; user-select: text; }
+            .gslide-image img { background: white; }
+        </style></head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> RFID-activated lockbox documentation
+        </a>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Electronic</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../rfid/">RFID Reader</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../lcd/">Lcd</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../servo/">Servo</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../led_strip/">Led strip</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Mechanical</span></p>
+              <ul class="current">
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Mechanical</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#shell">Shell:</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#lid">Lid:</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#latch">Latch:</a>
+    </li>
+    </ul>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">RFID-activated lockbox documentation</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Mechanical</li>
+      <li class="breadcrumb-item active">Mechanical</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="mechanical">Mechanical:</h1>
+<p>The box consists of three basic systems: The shell, which hopefully holds your stuff, the lid, which contains all the electrical components, and the latch, which keeps the box shut when necessary.</p>
+<h2 id="shell">Shell:</h2>
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../res/box.png" data-desc-position="bottom"><img alt="image" src="../res/box.png"></a></p>
+<ol>
+<li>These are sockets for individual LEDs. They can be used for things like power level monitoring, flashing when a card is near, successful unlock, error, etc. Multiple colors are available. The wires for them route through Feature 3, the LED strip slot.</li>
+<li>This is the catch for the latch. It holds the latch shut.</li>
+<li>This is an inset for the LED light strand in the diffusion strip. Wires can also be run through it.</li>
+<li>This is the hinge socket for the cap screw that is functioning as our hinge.</li>
+<li>This is a slot that the power shutoff switch plugs into. It’s a basic rocker switch.</li>
+<li>This is the USB-C port for recharging the battery.</li>
+</ol>
+<h2 id="lid">Lid:</h2>
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../res/lid.png" data-desc-position="bottom"><img alt="image" src="../res/lid.png"></a></p>
+<ol>
+<li>This is a nice slot in the Inset plate {Feature 5}, that lets you hide the circuit board deep inside.</li>
+<li>This is a spring holder for the springback system that auto-springs the box open.</li>
+<li>This is the other end of the hinge.</li>
+<li>This inset holds the servo.</li>
+<li>This is the plate that screws into the lid itself to keep everything contained.</li>
+<li>This holds the buzzer in place.</li>
+<li>Whoa! These are for screws to hold the thing in place! Whoa! (Live long and prosper, young padawans)</li>
+<li>This little thingy is an inset for the LCD that is visible from the top of the lid.</li>
+</ol>
+<h2 id="latch">Latch:</h2>
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../res/latch.png" data-desc-position="bottom"><img alt="image" src="../res/latch.png"></a></p>
+<ol>
+<li>This is the latch.</li>
+<li>This keeps the latch from going sideways or getting jammed or otherwise misbehaving.</li>
+<li>This is the double-barreled holder for the springs that force the latch back open.</li>
+<li>This little tail is for the cabling that goes to the servo to provide a mechanical connection betwixt the two assemblies</li>
+</ol>
+<h1 id="assembly">Assembly</h1>
+<p>Hitch all the pieces together, and integrate the components as indicated in the pictures. Then wire it all up according to the schematic. After that is done, put a bolt everywhere it looks like one is needed. </p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../led_strip/" class="btn btn-neutral float-left" title="Led strip"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+    </div>
+
+  <hr>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../led_strip/" style="color: #fcfcfc">« Previous</a></span>
+    
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+
+
+<script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+</script></body></html>
