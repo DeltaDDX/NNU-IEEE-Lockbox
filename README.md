@@ -8,4 +8,4 @@ IEEE club at Northwest Nazarene University
 See features/* branch(es) for latest additions to the source that will be merged with main once testing is complete
 
 # Documentation
-Instructions for hardward configuration, software installation, and usage can be found at the [Documentation Site]()
+Instructions for hardward configuration, software installation, and usage can be found at the [Documentation Site](https://deltaddx.github.io/NNU-IEEE-Lockbox/)
