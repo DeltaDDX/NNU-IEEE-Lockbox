@@ -117,7 +117,7 @@ void sleepLCD() {  // Clear the screen and turn off both display and backlight
   lcd.clear();  // Clear screen
   lcd.noDisplay();  // turn off text (reduces consumption)
   lcd.noBacklight();  // turn off backlight (biggest power saver)
-  lcdSleeping = true;
+  lcd_sleeping = true;
 }
 
 void wakeLCD() {
@@ -125,7 +125,7 @@ void wakeLCD() {
   lcd.backlight();
   lcd.setCursor(0,0);
   lcd_print("LCD Awake");
-  lcdSleeping = false;
+  lcd_sleeping = false;
   delay(350); // tiny pause so user sees it
   lcd.clear();
 }
