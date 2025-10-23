@@ -55,8 +55,8 @@ void loop() {
   //Wake up LCD and Unlock Box if LCD is sleeping
   if (lcd_sleeping) {
     wakeLCD();
-    lastActivity = millis();
   }
+  lastActivity = millis();
   
   // Print RFID_String and Unlock Box
   lcd_print(RFID_string());
