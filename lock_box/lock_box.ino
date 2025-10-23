@@ -29,6 +29,7 @@ Servo lockServo; // Instantiate Servo Object
 //Adafruit_NeoPixel strip(LED_COUNT, LED_DATA_PIN, NEO_GRB + NEO_KHZ800); //Instantiate LED Strip Object
 
 #include "low-level-functions.h"  // Helper functions in current directory
+#include "config.h" // Config setup
 
 // ====================== ARDUINO SETUP ==========================
 
