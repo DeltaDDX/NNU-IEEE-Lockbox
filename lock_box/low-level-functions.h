@@ -62,7 +62,7 @@ void rfid_setup() {
 // Compare RFID -> Unlock Box
 String RFID_string() {
   String uidString;
-  
+
   for (byte i = 0; i < mfrc522.uid.size; i++) {
     uidString += String(mfrc522.uid.uidByte[i], HEX);
     if (i < mfrc522.uid.size - 1) {
@@ -74,11 +74,11 @@ String RFID_string() {
 
 // Print to LCD Screen
 void lcd_print(String output) {
-   lcd.clear();
-   lcd.setCursor(0, 0);
+  lcd.clear();
+  lcd.setCursor(0, 0);
 
-   if (output.length() >= 16) {
-    lcd.print(output.substring(0,16));
+  if (output.length() >= 16) {
+    lcd.print(output.substring(0, 16));
     lcd.setCursor(0, 1);
     lcd.print(output.substring(16, output.length()));
   } else {
@@ -123,7 +123,7 @@ void sleepLCD() {  // Clear the screen and turn off both display and backlight
 void wakeLCD() {
   lcd.display();
   lcd.backlight();
-  lcd.setCursor(0,0);
+  lcd.setCursor(0, 0);
   lcd_print("LCD Awake");
   lcd_sleeping = false;
   delay(350); // tiny pause so user sees it
