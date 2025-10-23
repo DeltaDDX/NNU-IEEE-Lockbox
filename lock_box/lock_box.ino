@@ -51,18 +51,18 @@ void loop() {
   // Reset loop if no card or cannot read card
   if (!is_AvailableCard()) {
     return;
-    }
+  }
 
   //Wake up LCD and Unlock Box if LCD is sleeping
   if (lcd_sleeping) {
     wakeLCD();
   }
   lastActivity = millis();
-  
+
   // Print RFID_String and Unlock Box
   lcd_print(RFID_string());
   servo_unlock();
-  
+
   // Halt PICC and stop encryption on RFID
   mfrc522.PICC_HaltA();
   mfrc522.PCD_StopCrypto1();
