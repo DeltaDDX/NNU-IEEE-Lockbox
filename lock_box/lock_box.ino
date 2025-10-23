@@ -6,6 +6,11 @@
 #include <MFRC522.h>           // Install "MFRC522" by GithubCommunity
 #include <Adafruit_NeoPixel.h> // Install "Adafruit Neopixel" by Adafruit
 
+MFRC522 mfrc522(SS_PIN, RST_PIN); // Instantiate RFID Object w/ slave select and reset pins
+LiquidCrystal_I2C lcd(0x27, 16, 2); // Instantiate LCD Screen Object
+Servo lockServo; // Instantiate Servo Object
+//Adafruit_NeoPixel strip(LED_COUNT, LED_DATA_PIN, NEO_GRB + NEO_KHZ800); //Instantiate LED Strip Object
+
 #include "low-level-functions.h"  // Helper functions in current directory
 
 const uint8_t SERVO_PIN = 7; //2;
@@ -24,11 +29,6 @@ const uint8_t LOW_BATTERY_PIN = 5; //3; // Yellow LED PIN
 
 unsigned long lastActivity = 0;
 bool lcd_sleeping = false;
-
-MFRC522 mfrc522(SS_PIN, RST_PIN); // Instantiate RFID Object w/ slave select and reset pins
-LiquidCrystal_I2C lcd(0x27, 16, 2); // Instantiate LCD Screen Object
-Servo lockServo; // Instantiate Servo Object
-//Adafruit_NeoPixel strip(LED_COUNT, LED_DATA_PIN, NEO_GRB + NEO_KHZ800); //Instantiate LED Strip Object
 
 // ====================== ARDUINO SETUP ==========================
 
