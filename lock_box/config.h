@@ -21,6 +21,14 @@ void rfid_setup() {
   lcd_print("Scan PICC to see UID");
 }
 
+// ====================== Startup CONFIG ==============================
+
+void safe_startup() {
+  lockServo.write(SERVO_LOCK_ANGLE);
+  lcd_print("System Ready");
+  delay(500);
+}
+
 // ====================== LED STRIP CONFIG ========================
 /*
   void led_setup() {
