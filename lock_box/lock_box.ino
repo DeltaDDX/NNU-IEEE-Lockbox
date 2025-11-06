@@ -5,6 +5,8 @@
 #include <SPI.h>
 #include <MFRC522.h>           // Install "MFRC522" by GithubCommunity
 #include <Adafruit_NeoPixel.h> // Install "Adafruit Neopixel" by Adafruit
+#include <avr/sleep.h>
+#include <avr/interrupt.h>
 
 const uint8_t SERVO_PIN = 7; //2;
 const int SERVO_LOCK_ANGLE = 15;
@@ -13,6 +15,7 @@ const unsigned long HOLD_MS = 2000;  // time to hold each position
 const unsigned long LCD_SLEEP_MS = 10000UL;
 const uint8_t RST_PIN = 9;
 const uint8_t SS_PIN = 10;
+const uint8_t IRQ_PIN = 2; // (INT0 pin on uno) ? for mechanical people
 const uint8_t BUZZER_PIN = 6;
 const uint8_t ERROR_PIN = 4; // Red LED PIN
 const uint8_t VALID_PIN = 3; //5; // Green LED PIN
@@ -21,7 +24,7 @@ const uint8_t LOW_BATTERY_PIN = 5; //3; // Yellow LED PIN
 //const uint8_t LED_COUNT = 23;
 
 unsigned long lastActivity = 0;
-bool lcd_sleeping = false;
+volatile bool wakeFlag = false;
 
 MFRC522 mfrc522(SS_PIN, RST_PIN); // Instantiate RFID Object w/ slave select and reset pins
 LiquidCrystal_I2C lcd(0x27, 16, 2); // Instantiate LCD Screen Object
@@ -46,18 +49,14 @@ void setup() {
 void loop() {
 
   // Set LCD to sleep if been over set time
-  if (!lcd_sleeping && millis() - lastActivity > LCD_SLEEP_MS) {
-    sleepLCD();
+  if (!wakeFlag && millis() - lastActivity > LCD_SLEEP_MS) {
+    enterSleepMode(); // Put MCU and LCD sleep
   }
   // Reset loop if no card or cannot read card
   if (!is_AvailableCard()) {
     return;
   }
 
-  //Wake up LCD and Unlock Box if LCD is sleeping
-  if (lcd_sleeping) {
-    wakeLCD();
-  }
   lastActivity = millis();
 
   // Print RFID_String and Unlock Box
