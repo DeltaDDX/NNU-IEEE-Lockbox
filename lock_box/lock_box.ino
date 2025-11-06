@@ -38,6 +38,7 @@ void setup() {
   lcd_setup();
   servo_setup();
   rfid_setup();
+  safe_startup();
 }
 
 // ====================== MAIN LOOP ==============================
