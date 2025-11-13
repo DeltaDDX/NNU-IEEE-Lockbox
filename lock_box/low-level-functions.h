@@ -54,6 +54,11 @@ bool is_AvailableCard() {
   return false;
 }
 
+void enterSleepMode() {
+  sleepLCD();
+  
+}
+
 void sleepLCD() {  // Clear the screen and turn off both display and backlight
   lcd.clear();  // Clear screen
   lcd.noDisplay();  // turn off text (reduces consumption)
