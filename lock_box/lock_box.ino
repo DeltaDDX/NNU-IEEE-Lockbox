@@ -24,7 +24,7 @@ const uint8_t LOW_BATTERY_PIN = 5; //3; // Yellow LED PIN
 //const uint8_t LED_COUNT = 23;
 
 unsigned long lastActivity = 0;
-volatile bool wakeFlag = false;
+volatile bool sleepFlag = false;
 
 MFRC522 mfrc522(SS_PIN, RST_PIN); // Instantiate RFID Object w/ slave select and reset pins
 LiquidCrystal_I2C lcd(0x27, 16, 2); // Instantiate LCD Screen Object
@@ -49,12 +49,18 @@ void setup() {
 void loop() {
 
   // Set LCD to sleep if been over set time
-  if (!wakeFlag && millis() - lastActivity > LCD_SLEEP_MS) {
+  if (!sleepFlag && millis() - lastActivity > LCD_SLEEP_MS) {
+    sleepFlag = !SleepFlag;
     enterSleepMode(); // Put MCU and LCD sleep
   }
   // Reset loop if no card or cannot read card
   if (!is_AvailableCard()) {
     return;
+  }
+
+  if (sleepFlag) {
+    sleepFlag = !SleepFlag;
+    exitSleepMode();
   }
 
   lastActivity = millis();
